@@ -1,0 +1,62 @@
+
+CREATE DB IF NOT EXISTS airdb;
+
+CREATE TABLE airdb.Applicant (
+   applicantId varchar(50) NOT NULL,
+   full_name varchar(255) NOT NULL,
+   email varchar(255) NOT NULL,
+   password varchar(225) NOT NULL,
+   CONSTRAINT Applicant_pk PRIMARY KEY (applicantId)
+);
+
+
+CREATE TABLE airdb.Account (
+   accountId int NOT NULL,
+   applicantId char(12) NOT NULL,
+   balance int NOT NULL,
+   currency varchar(5) NOT NULL,
+   isPrimary tinyint NOT NULL,
+   CONSTRAINT accountId PRIMARY KEY (accountId)
+);
+
+
+ALTER TABLE airdb.Account ADD CONSTRAINT account_applicantId FOREIGN KEY account_applicantId (applicantId)
+   REFERENCES airdb.Applicant (applicantId);
+
+
+CREATE TABLE airdb.Route (
+   routeId int NOT NULL,
+   `from` varchar(10) NULL,
+   `to` varchar(10) NULL,
+   CONSTRAINT Route_pk PRIMARY KEY (routeId)
+);
+
+
+CREATE TABLE airdb.airlineOffer (
+   offerId int NOT NULL,
+   price int NOT NULL,
+   routeId int NOT NULL,
+   CONSTRAINT airlineOffer_pk PRIMARY KEY (offerId)
+);
+
+ALTER TABLE airdb.airlineOffer ADD CONSTRAINT airlineOffer_routeId FOREIGN KEY airlineOffer_routeId (routeId)
+   REFERENCES airdb.Route (routeId);
+
+
+CREATE TABLE airdb.PurchaseTicket (
+   purchaseId int NOT NULL,
+   applicantId varchar(50) NOT NULL,
+   accountId int NOT NULL,
+   dateTime TimeStamp NOT NULL,
+   routeId int NOT NULL,
+   CONSTRAINT PurchaseTicket_pk PRIMARY KEY (purchaseId)
+);
+
+ALTER TABLE airdb.PurchaseTicket ADD CONSTRAINT PurchaseTicket_applicantId FOREIGN KEY PurchaseTicket_applicantId (applicantId)
+   REFERENCES airdb.Applicant (applicantId);
+ALTER TABLE airdb.PurchaseTicket ADD CONSTRAINT PurchaseTicket_accountId FOREIGN KEY PurchaseTicket_accountId (accountId)
+   REFERENCES airdb.Account (accountId);
+ALTER TABLE airdb.PurchaseTicket ADD CONSTRAINT PurchaseTicket_routeId FOREIGN KEY PurchaseTicket_routeId (routeId)
+   REFERENCES airdb.Route (routeId);
+
+
